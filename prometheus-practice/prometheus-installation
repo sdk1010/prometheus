@@ -1,0 +1,33 @@
+##Install Prometheus using Docker
+
+#Install Docker
+
+sudo apt update
+sudo apt install docker.io
+sudo chown $USER /var/run/docker.soc
+
+#Install Prometheus
+
+wget https://raw.githubusercontent.com/prometheus/prometheus/main/documentation/examples/prometheus.yml
+
+docker run -d --name=prometheus -p 9090:9090 -v <PATH_TO_prometheus.yml_FILE>:/etc/prometheus/prometheus.yml prom/prometheus --config.file=/etc/prometheus/prometheus.yml
+
+OR 
+
+Install Prometheus, cAdvisor and Redis using Docker-Compose
+
+Please, Check docker-compose.yml file.
+
+Then,
+
+#Add cAdvisor target
+
+scrape_configs:
+  - job_name: cadvisor
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["cadvisor:8080"]
+
+#Test PromQL
+
+rate(container_cpu_usage_seconds_total{name="redis"}[1m])
